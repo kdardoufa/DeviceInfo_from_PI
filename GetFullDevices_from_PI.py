@@ -5,12 +5,17 @@ import logging
 from requests.auth import HTTPBasicAuth
 import time
 
+# Define Global Variables
+USERNAME = "username"  # define  REST API username
+PASSWORD = "password"  # define REST API passowrd
+PI_ADDRESS = "ip_address"  # define IP Address of Prime Infrastructure Server
+
 requests.packages.urllib3.disable_warnings()
 
 logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
                     filename='GetAllDevices.log', level=logging.INFO)
 
-controller_url = "https://ip_address/webacs/api/v4/data/InventoryDetails/"
+controller_url = "https://"+PI_ADDRESS+"/webacs/api/v4/data/InventoryDetails/"
 Group_List = []
 
 timestr = time.strftime("%Y%m%d_%H%M")
@@ -19,8 +24,8 @@ Device_List = "DeviceList_"+timestr+".csv"
 
 def getDeviceGroups():
     logging.info(" - Getting all device groups")
-    url = "https://ip_address/webacs/api/v2/data/DeviceGroups.json"
-    response = requests.get(url, auth=HTTPBasicAuth("username", "password"), verify=False)
+    url = "https://"+PI_ADDRESS+"/webacs/api/v2/data/DeviceGroups.json"
+    response = requests.get(url, auth=HTTPBasicAuth(USERNAME, PASSWORD), verify=False)
     r_json = response.json()
     Group_List = []
     group = "dummy value"
@@ -30,7 +35,7 @@ def getDeviceGroups():
                 new_url = value + ".json"
                 # print(new_url)
                 group_response = requests.get(
-                    new_url, auth=HTTPBasicAuth("username", "password"), verify=False)
+                    new_url, auth=HTTPBasicAuth(USERNAME, PASSWORD), verify=False)
                 group_json = group_response.json()
                 # print(new_url)
                 dev_dict = group_json["queryResponse"]["entity"][0]
@@ -80,7 +85,7 @@ def getDevices(Group_List):
     while i < NumOfGroups:
         group = Group_List[i]
         url = controller_url + ".json?.group=" + group
-        response = requests.get(url, auth=HTTPBasicAuth("username", "password"), verify=False)
+        response = requests.get(url, auth=HTTPBasicAuth(USERNAME, PASSWORD), verify=False)
         r_json = response.json()
         try:
             count = (r_json.get("queryResponse", "")).get("@count", "")
@@ -96,7 +101,7 @@ def getDevices(Group_List):
                             new_url = value + ".json"
                             # print(new_url)
                             device_response = requests.get(
-                                new_url, auth=HTTPBasicAuth("username", "password"), verify=False)
+                                new_url, auth=HTTPBasicAuth(USERNAME, PASSWORD), verify=False)
                             device_json = device_response.json()
                             response = device_json.get("queryResponse", "")
                             if (type(response) != str)and(group != "Unsupported Cisco Device"):
