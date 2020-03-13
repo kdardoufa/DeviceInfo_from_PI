@@ -40,6 +40,6 @@ During the test phase it was noticed that the script would fail, because during 
 
 # Author(s)
 This project was written and is maintained by the following individuals
-- Katerina Dardoufa<kdardoufa@gmail.com>
+- Katerina Dardoufa (kdardoufa@gmail.com)
 
 
