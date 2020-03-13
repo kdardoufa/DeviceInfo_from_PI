@@ -11,7 +11,7 @@ The primary goal was to gather the information and feed it into netbox.
 # Configuration
 The following global variables should be configured by the user, according to their environment.
 - USERNAME: define REST API username
-- PASSWORD: define REST API passowrd
+- PASSWORD: define REST API password
 - PI_ADDRESS: define IP Address of Prime Infrastructure Server
 
 # Technologies & Frameworks Used
