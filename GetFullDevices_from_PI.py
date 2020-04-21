@@ -27,8 +27,6 @@ def getDeviceGroups():
     url = "https://"+PI_ADDRESS+"/webacs/api/v2/data/DeviceGroups.json?.full=true"
     response = requests.get(url, auth=HTTPBasicAuth(USERNAME, PASSWORD), verify=False)
     r_json = response.json()
-    Group_List = []
-    group = "dummy value"
     for entity in r_json['queryResponse']['entity']:
         group = entity["deviceGroupsDTO"]["groupName"]
         Group_List.append(group)
