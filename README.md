@@ -43,4 +43,4 @@ The script is written in Python 3
 This project was written and is maintained by the following individuals
 - Katerina Dardoufa (kdardoufa@gmail.com)
 
-
+[![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/kdardoufa/DeviceInfo_from_PI)
