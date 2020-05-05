@@ -21,21 +21,21 @@ The following global variables should be configured by the user, according to th
 * The script is written in Python 3.
 
 # Installation
-1.	Clone the repo
-   * git clone https://github.com/kdardoufa/DeviceInfo_from_PI.git
+1. Clone the repo
+  * git clone https://github.com/kdardoufa/DeviceInfo_from_PI.git
 
-1. cd into directory
-   * cd DeviceInfo_from_PI
+2. cd into directory
+  * cd DeviceInfo_from_PI
 
-1.	Create the virtual environment in a sub dir in the same directory
-   * python3 -m venv venv
+3. Create the virtual environment in a sub dir in the same directory
+  * python3 -m venv venv
 
-1.	Start the virtual environment and install requirements.txt
-   * source venv/bin/activate
-   * pip install -r requirements.txt
+4. Start the virtual environment and install requirements.txt
+  * source venv/bin/activate
+  * pip install -r requirements.txt
 
-1.	Execute the script as any other Python script form console. 
-   * python getFullDevices_from_PI.py
+5. Execute the script as any other Python script form console. 
+  * python getFullDevices_from_PI.py
 
 # Known issues
 No Issues found
