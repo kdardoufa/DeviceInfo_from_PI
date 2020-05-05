@@ -1,5 +1,5 @@
 
-# Description 
+## Description 
 
 Use Cisco Prime Infrastructure 3.5 REST APIs to get information about the Hostname/Mgmt IP Address/ SNMP Location/SerialNumber of all devices monitored by the PI. The script does the following:
 -	Gets all the device type groups (Routers/4300/4200/Switches etc). Function getDeviceGroups is used for this purpose.
@@ -16,33 +16,33 @@ The following global variables should be configured by the user, according to th
 - PI_ADDRESS: define IP Address of Prime Infrastructure Server
 
 # Technologies & Frameworks Used
-Prime Infratructure APIs are used.
-NO Third-Party products or Services are used.
-The script is written in Python 3
+* Prime Infratructure APIs are used.
+* NO Third-Party products or Services are used.
+* The script is written in Python 3.
 
 # Installation
 1.	Clone the repo
- - git clone https://github.com/kdardoufa/DeviceInfo_from_PI.git
+   * git clone https://github.com/kdardoufa/DeviceInfo_from_PI.git
 
-2.	cd into directory
- - cd DeviceInfo_from_PI
+1. cd into directory
+   * cd DeviceInfo_from_PI
 
-3.	Create the virtual environment in a sub dir in the same directory
- - python3 -m venv venv
+1.	Create the virtual environment in a sub dir in the same directory
+   * python3 -m venv venv
 
-4.	Start the virtual environment and install requirements.txt
- - source venv/bin/activate
- - pip install -r requirements.txt
+1.	Start the virtual environment and install requirements.txt
+   * source venv/bin/activate
+   * pip install -r requirements.txt
 
-5.	Execute the script as any other Python script form console. 
- - python getFullDevices_from_PI.py
+1.	Execute the script as any other Python script form console. 
+   * python getFullDevices_from_PI.py
 
 # Known issues
-- No Issues found
+No Issues found
 
 # Author(s)
 This project was written and is maintained by the following individuals
-- Katerina Dardoufa (kdardoufa@gmail.com)
+> Katerina Dardoufa (kdardoufa@gmail.com)
 
 
 [![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/kdardoufa/DeviceInfo_from_PI)
