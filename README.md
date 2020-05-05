@@ -1,3 +1,5 @@
+[![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/kdardoufa/DeviceInfo_from_PI)
+
 # Description 
 
 Use Cisco Prime Infrastructure 3.5 REST APIs to get information about the Hostname/Mgmt IP Address/ SNMP Location/SerialNumber of all devices monitored by the PI. The script does the following:
@@ -43,4 +45,4 @@ The script is written in Python 3
 This project was written and is maintained by the following individuals
 - Katerina Dardoufa (kdardoufa@gmail.com)
 
-[![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/kdardoufa/DeviceInfo_from_PI)
+
