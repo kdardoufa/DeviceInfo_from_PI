@@ -37,7 +37,7 @@ The script is written in Python 3
  - python getFullDevices_from_PI.py
 
 # Known issues
--
+- No Issues found
 
 # Author(s)
 This project was written and is maintained by the following individuals
