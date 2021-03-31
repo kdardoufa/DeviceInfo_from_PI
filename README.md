@@ -10,10 +10,17 @@ DeviceList_current_date_time.csv.
 The primary goal was to gather the information and feed it into netbox.
 
 # Configuration
-The following global variables should be configured by the user, according to their environment.
+The user should define the following in a file named primeapidata.py, according to their environment.
 - USERNAME: define REST API username
 - PASSWORD: define REST API password
 - PI_ADDRESS: define IP Address of Prime Infrastructure Server
+
+It's also possible to comment out the import of those variables and instead define them as global variables. If that is your choice, comment out  the commands:
+```python
+#USERNAME = "username"  # define  REST API username
+#PASSWORD = "password"  # define REST API passowrd
+#PI_ADDRESS = "ip_address"  # define IP Address of Prime Infrastructure Server
+```
 
 # Technologies & Frameworks Used
 * Prime Infratructure APIs are used.
