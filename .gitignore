@@ -1,0 +1,9 @@
+*.log
+*.xlsx
+*.csv
+*.txt
+*.yml
+*.yaml
+credentials.py
+primeapidata.py
+__pycache__/

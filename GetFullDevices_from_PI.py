@@ -4,40 +4,40 @@ import csv
 import logging
 from requests.auth import HTTPBasicAuth
 import time
+from primeapidata import PI_ADDRESS, USERNAME, PASSWORD
 
-# Define Global Variables
-USERNAME = "username"  # define  REST API username
-PASSWORD = "password"  # define REST API passowrd
-PI_ADDRESS = "ip_address"  # define IP Address of Prime Infrastructure Server
+# Define Global Variables - these should be included in a separate file named primeapaidata.py
+#USERNAME = "username"  # define  REST API username
+#PASSWORD = "password"  # define REST API passowrd
+#PI_ADDRESS = "ip_address"  # define IP Address of Prime Infrastructure Server
 
 requests.packages.urllib3.disable_warnings()
 
 logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
                     filename='GetAllDevices.log', level=logging.INFO)
 
-controller_url = "https://"+PI_ADDRESS+"/webacs/api/v4/data/InventoryDetails/"
-Group_List = []
+#controller_url = "https://"+PI_ADDRESS+"/webacs/api/v4/data/InventoryDetails/"
 
 timestr = time.strftime("%Y%m%d_%H%M")
 Device_List = "DeviceList_"+timestr+".csv"
 
 
+# Beginning of Function
 def getDeviceGroups():
     logging.info(" - Getting all device groups")
     url = "https://"+PI_ADDRESS+"/webacs/api/v2/data/DeviceGroups.json?.full=true"
     response = requests.get(url, auth=HTTPBasicAuth(USERNAME, PASSWORD), verify=False)
     r_json = response.json()
+    Group_List = []
     for entity in r_json['queryResponse']['entity']:
         group = entity["deviceGroupsDTO"]["groupName"]
         Group_List.append(group)
-    return(Group_List)
-    Group_List.append(group)
-    logging.info(f' - {group} added to list')
+        logging.info(f" - added group {group}")
     logging.info(" - Initial groups ok... moving on")
     return(Group_List)
 # End of Function
 
-
+# Beginning of Function
 def RemoveGeneric(Group_List):
     # if thing in some_list: some_list.remove(thing)
     logging.info(" - Removing Generic Groups")
