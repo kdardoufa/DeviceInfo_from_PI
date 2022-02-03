@@ -53,3 +53,7 @@ This project was written and is maintained by the following individuals
 
 
 [![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/kdardoufa/DeviceInfo_from_PI)
+
+# Maintenance Update (by I.T.):
+We have been developping more code for working with the Cisco Prime Infrastructure API. This resulted in improving the code but also adding features such as querring the Access Point Endpoint. We will keep maintaining the code until it becomes the basis for an SDK or Prime Infrastructure is removed from our infrastructure and no longer supported.
+The requirements have also been updated.
