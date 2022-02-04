@@ -1,10 +1,12 @@
 from primeapidata import PI_ADDRESS, USERNAME, PASSWORD
-from PrimeDeviceFunctions import getDevices, getDeviceGroups, RemoveGeneric
+from PrimeDeviceFunctions import getDevices, getDeviceGroups, RemoveGeneric, writeDevices
 
 def main():
     InitialGroups = getDeviceGroups()
     Groups = RemoveGeneric(InitialGroups)
-    getDevices(Groups)
+    DevicesList = getDevices(Groups)
+    writeDevices(DevicesList)
+
     return()
 
 
