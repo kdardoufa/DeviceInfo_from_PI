@@ -6,12 +6,21 @@ import time
 from primeapidata import PI_ADDRESS, USERNAME, PASSWORD
 
 requests.packages.urllib3.disable_warnings()
+''' 
+Call one of those from the main function or put one out of comments here, be carefull of the different filenames.
+It should probably be transfered into a function and pass the filename as a parameter.
+But then maybe the logging object would need to be passed around. Not sure. Will test.
 
 logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
                     filename='GetAllDevices.log', level=logging.INFO)
 
-timestr = time.strftime("%Y%m%d_%H%M")
-Device_List = "DeviceList_"+timestr+".csv"
+logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S',
+                    filename='GetAll_IPs.log', level=logging.INFO)
+'''
+
+#timestr = time.strftime("%Y%m%d_%H%M")
+#Device_List = "DeviceList_"+timestr+".csv"
+#IP_file = "IP_"+timestr+".csv"
 
 # Define Global Variables - these should be included in a separate file named primeapaidata.py
 #USERNAME = "username"  # define  REST API username
@@ -25,7 +34,7 @@ def getAPIResponse(apiurl):
 
 # Beginning of Function
 def getDeviceGroups():
-    logging.info(" - Getting all device groups")
+    logging.info("Getting all device groups")
     apiurl = "https://"+PI_ADDRESS+"/webacs/api/v2/data/DeviceGroups.json?.full=true"
     r_json = getAPIResponse(apiurl)
     Group_List = []
@@ -33,14 +42,14 @@ def getDeviceGroups():
         group = entity["deviceGroupsDTO"]["groupName"]
         Group_List.append(group)
         logging.info(f" - added group {group}")
-    logging.info(" - Initial groups ok... moving on")
+    logging.info("Initial groups ok... moving on")
     return(Group_List)
 # End of Function
 
 # Beginning of Function
 def RemoveGeneric(Group_List):
     #if thing in some_list: some_list.remove(thing)
-    logging.info(" - Removing Generic Groups")
+    logging.info("Removing Generic Groups")
     if "Device Type" in Group_List:
         Group_List.remove("Device Type")
     if "Routers" in Group_List:
@@ -55,13 +64,17 @@ def RemoveGeneric(Group_List):
         Group_List.remove("Unsupported Cisco Device")
     if "Wireless Controller" in Group_List:
         Group_List.remove("Wireless Controller")
+    if "Cisco 4400 Series Integrated Services Routers" in Group_List:
+        Group_List.remove("Cisco 4400 Series Integrated Services Routers")
     new_Group_List = Group_List
-    logging.info(" - Final groups ok... moving on")
+    logging.info("Final groups ok... moving on")
     return(new_Group_List)
 # End of Function
 
 # Beginning of Function
 def getDevices_old(Group_List):
+    timestr = time.strftime("%Y%m%d_%H%M")
+    Device_List = "DeviceList_"+timestr+".csv"
     logging.info(" - Getting Device Info")
     i = 0
     DeviceFileList = []
@@ -111,7 +124,7 @@ def getDevices_old(Group_List):
 
 # Beginning of function
 def getDevices(Group_List):
-    logging.info(" - Getting Device Info")
+    logging.info("Getting Device Info")
     #create a list of list of strings for the device file
     DeviceList = []
     for group in Group_List:
@@ -144,9 +157,97 @@ def getDevices(Group_List):
     logging.info(" - All info has been collected.")
     return(DeviceList)
 
-'''****This Functions needs to be reviewed***'''
+def getIPs_old(Group_List):
+    logging.info("Getting Device IPs")
+    timestr = time.strftime("%Y%m%d_%H%M")
+    IP_file = "IP_"+timestr+".csv"
+    output = []
+    controller_url = "https://"+PI_ADDRESS+"/webacs/api/v4/data/InventoryDetails/"
+    for group in Group_List:
+        url = controller_url + ".json?.full=true&.group=" + group + "&.maxResults=1000"
+        response = requests.get(url, auth=HTTPBasicAuth(USERNAME, PASSWORD), verify=False)
+        r_json = response.json()
+        count = (r_json.get("queryResponse", "")).get("@count", "")
+        if count != 0:
+            logging.info(f'Getting IPs for devices in group {group}')
+            ''' This group has already been removed from the group list, the if clause is redundant'''
+            if group != "Unsupported Cisco Device":
+                for Info in r_json['queryResponse']['entity']:
+                    intf_list = Info["inventoryDetailsDTO"]["ipInterfaces"]["ipInterface"]
+                    for interface in intf_list:
+                        ip = interface["ipAddress"].get("address", "")
+                        mask = interface.get("prefixLength", "")
+                        ip_and_mask = str(ip) + "/" + str(mask)
+                        output.append(ip_and_mask)
+            else:
+                for Info in r_json['queryResponse']['entity']:
+                    ip = Info["inventoryDetailsDTO"]["summary"]["ipAddress"]
+                    mask = "24"
+                    ip_and_mask = str(ip) + "/" + str(mask)
+                    output.append(ip_and_mask)
+            # Move on to next group
+        # If no devices in Group then move on
+        else:
+            continue
+# for loop ends
+# open a file for writing
+    IPList = open(IP_file, 'w')
+# create the csv writer object
+    csvwriter = csv.writer(IPList)
+    csvwriter.writerows(zip(output))
+    IPList.close()
+    return()
+# End of function
+
+def getIPs(Group_List):
+    logging.info("Getting Device IPs")
+    IPs_List = []
+    for group in Group_List:
+        apiurl = "https://"+PI_ADDRESS+"/webacs/api/v4/data/InventoryDetails.json?.full=true&.maxResults=1000&.group=" + group
+        r_json = getAPIResponse(apiurl)
+        try:
+            # get the number of devices in group
+            count = int(r_json["queryResponse"]["@count"])
+            # if there are devices in this group process them
+            if count != 0:
+                logging.info(f' - Getting IPs for devices in group {group}')
+                ''' This group has already been removed from the group list, the if clause is redundant'''
+                if group != "Unsupported Cisco Device":
+                    for Info in r_json['queryResponse']['entity']:
+                        intf_list = Info["inventoryDetailsDTO"]["ipInterfaces"]["ipInterface"]
+                        for interface in intf_list:
+                            ip = interface["ipAddress"].get("address", "")
+                            mask = interface.get("prefixLength", "")
+                            ip_and_mask = str(ip) + "/" + str(mask)
+                            IPs_List.append(ip_and_mask)
+                else:
+                    for Info in r_json['queryResponse']['entity']:
+                        ip = Info["inventoryDetailsDTO"]["summary"]["ipAddress"]
+                        mask = "24"
+                        ip_and_mask = str(ip) + "/" + str(mask)
+                        IPs_List.append(ip_and_mask)
+                # Move on to next group
+            # If no devices in Group then move on
+            else:
+                continue
+            count = (r_json.get("queryResponse", "")).get("@count", "")
+        except:
+            logging.info(" - Moving on to next group - due to error")
+            continue
+    return IPs_List
+# for loop ends
+
+'''
+This Functions needs to be reviewed.
+Would be nice if the filename is passed as a parameter.
+Also if the list of fields is also parameter, 
+then we can have a single function for exporting
+to csv format.
+'''
 def writeDevices(DeviceFileList):
-    logging.info(" - Writing data to file.")
+    logging.info("Writing data to file.")
+    timestr = time.strftime("%Y%m%d_%H%M")
+    Device_List = "DeviceList_"+timestr+".csv"
     # open a file for writing
     DeviceList = open(Device_List, 'w')
     # create the csv writer object
@@ -156,9 +257,24 @@ def writeDevices(DeviceFileList):
     for line in DeviceFileList:
         csvwriter.writerow(line)
     DeviceList.close()
-    logging.info(" - All done.\nEND")
+    logging.info("All done.")
     return()
 # End of function
+
+def writeIPs(IPs_List):
+    timestr = time.strftime("%Y%m%d_%H%M")
+    IP_file = "IP_"+timestr+".csv"
+    # open a file for writing
+    IPList = open(IP_file, 'w')
+    # create the csv writer object
+    csvwriter = csv.writer(IPList)
+    '''
+    zip is needed to put the IP addresses together without commas between each string.
+    We may look for a better solution.
+    '''
+    csvwriter.writerows(zip(IPs_List))
+    IPList.close()
+    return()
 
 # just get serials and type
 def getDevicesSerials(Group_List):
